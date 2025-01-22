@@ -17,7 +17,7 @@ jobs:
          run: cargo build --verbose  # 运行 cargo build 命令
 
        - name: Upload artifacts
-         uses: actions/upload-artifact@v2
+         uses: actions/upload-artifact@v3
          with:
            name: rust-binary  # 工件名称，可以是任何你喜欢的名字
            path: target/release/  # 指定要上传的文件或目录路径
