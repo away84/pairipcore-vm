@@ -1,0 +1,708 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Instruction Set &#8212; pairipcore-vm</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="_static/documentation_options.js?v=e1a75a79"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'instructions';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Strings" href="strings.html" />
+    <link rel="prev" title="Identifying the VM" href="cfg.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">pairipcore-vm</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Reversing</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cfg.html">Identifying the VM</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Instruction Set</a></li>
+<li class="toctree-l1"><a class="reference internal" href="strings.html">Strings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="automation.html">Automatic Analysis</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Python API</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="pyapi/context.html">Virtual Machine Context</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pyapi/insn.html">Instruction Format Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pyapi/strings.html">String Decoding</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pyapi/decompiler.html">Decompiler Components</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/MatrixEditor/pairipcore-vm" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/MatrixEditor/pairipcore-vm/blob/master/instructions.md?plain=1" target="_blank"
+   class="btn btn-sm btn-source-file-button dropdown-item"
+   title="Show source"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-code"></i>
+  </span>
+<span class="btn__text-container">Show source</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/MatrixEditor/pairipcore-vm/edit/master/instructions.md" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/MatrixEditor/pairipcore-vm/issues/new?title=Issue%20on%20page%20%2Finstructions.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/instructions.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Instruction Set</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#opcode-obfuscation">Opcode Obfuscation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#virtual-memory">Virtual Memory</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#entry-point">Entry Point</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#instruction-format">Instruction Format</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#opcode-table">Opcode Table</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#format-ids">Format IDs</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="instruction-set">
+<h1>Instruction Set<a class="headerlink" href="#instruction-set" title="Link to this heading">#</a></h1>
+<p>To fully comprehend how each opcode functions and to accurately disassemble
+the bytecode found in asset files, it is crucial to understand the parsing
+of opcodes. Each opcode precedes its associated instruction, so decoding
+the opcodes is the first step in the process.</p>
+<section id="opcode-obfuscation">
+<h2>Opcode Obfuscation<a class="headerlink" href="#opcode-obfuscation" title="Link to this heading">#</a></h2>
+<p>Google, of course, applies obfuscation to each opcode, making identification more
+challenging. Despite this, the decoding algorithm for each opcode is provided below,
+which will enable us to decode the opcodes used in the bytecode:</p>
+<div class="literal-block-wrapper docutils container" id="id2">
+<div class="code-block-caption"><span class="caption-text">Python implementation of <code class="docutils literal notranslate"><span class="pre">decode_opcode</span></code></span><a class="headerlink" href="#id2" title="Link to this code">#</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">def</span><span class="w"> </span><span class="nf">decode_opcode</span><span class="p">(</span><span class="n">raw_opcode</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="linenos">2</span>    <span class="n">a</span> <span class="o">=</span> <span class="p">(</span><span class="n">raw_opcode</span> <span class="o">^</span> <span class="mh">0xFFFFFF64</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0xFFFF</span>
+<span class="linenos">3</span>    <span class="n">b</span> <span class="o">=</span> <span class="p">(</span><span class="n">a</span> <span class="o">*</span> <span class="mh">0xA6D1</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">16</span>
+<span class="linenos">4</span>
+<span class="linenos">5</span>    <span class="n">result</span> <span class="o">=</span> <span class="p">(</span><span class="n">a</span> <span class="o">-</span> <span class="n">b</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0xFFFE</span>
+<span class="linenos">6</span>    <span class="n">result</span> <span class="o">=</span> <span class="p">(</span><span class="n">b</span> <span class="o">+</span> <span class="p">(</span><span class="n">result</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">))</span> <span class="o">&amp;</span> <span class="mh">0xFFFFFFFF</span>
+<span class="linenos">7</span>
+<span class="linenos">8</span>    <span class="n">bits</span> <span class="o">=</span> <span class="p">(</span><span class="n">result</span> <span class="o">&gt;&gt;</span> <span class="mi">7</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0x1FF</span>                <span class="c1"># bits 7-9</span>
+<span class="linenos">9</span>    <span class="k">return</span> <span class="p">(</span><span class="n">a</span> <span class="o">-</span> <span class="p">(</span><span class="n">bits</span> <span class="o">*</span> <span class="mh">0x9B</span><span class="p">))</span> <span class="o">&amp;</span> <span class="mh">0xFFFFFFFF</span>
+</pre></div>
+</div>
+</div>
+<p>Using this algorithm, we can successfully decode the opcodes. However, there
+is an additional step that needs to be performed before the modified
+Fetch-Decode-Execute (FDE) loop starts. Each asset file contains a compiled
+entry point address. This address specifies the location of the first
+opcode in the bytecode stream.</p>
+</section>
+<section id="virtual-memory">
+<h2>Virtual Memory<a class="headerlink" href="#virtual-memory" title="Link to this heading">#</a></h2>
+<p>Unlike other VMs, Google chose to embed part of the memory directly within the asset file,
+requiring virtual memory addresses to point to an offset in that file. Unfortunately,
+these addresses are encoded, so we need to decode them first to reveal the actual offset:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">decode_address</span><span class="p">(</span><span class="n">enc_address</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">code_length</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">return</span> <span class="p">((</span><span class="n">enc_address</span> <span class="o">^</span> <span class="o">~</span><span class="n">code_length</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0xFFFFFFFF</span><span class="p">)</span> <span class="o">%</span> <span class="n">code_length</span>
+</pre></div>
+</div>
+<p>To parse and decode addresses directly from the file stream, <code class="docutils literal notranslate"><span class="pre">VMContext</span></code> provides a
+utility function named <code class="docutils literal notranslate"><span class="pre">addr</span></code>. Note that the offset you provide is <strong>relative</strong> by
+default. To disable this behavior, set <code class="docutils literal notranslate"><span class="pre">rel=False</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># parses u32 and decodes address at offset context.pc + 0x1234</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">context</span><span class="o">.</span><span class="n">addr</span><span class="p">(</span><span class="mh">0x1234</span><span class="p">)</span>
+<span class="go"># ...</span>
+</pre></div>
+</div>
+</section>
+<section id="entry-point">
+<h2>Entry Point<a class="headerlink" href="#entry-point" title="Link to this heading">#</a></h2>
+<aside class="margin sidebar">
+<p class="sidebar-title"><strong>Asset Files</strong></p>
+<p>If you take a look at the asset files you may have noticed the file
+magic <code class="docutils literal notranslate"><span class="pre">\0IAP</span></code>. Its usage remains unknown, because the VM doesn’t
+care about the file magic.</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>00000000: .IAP.......X....
+00000010: ]..)..r.Il..:...
+</pre></div>
+</div>
+</aside>
+<p>Each asset file contains an entry point address located at an offset derived
+from an integer at position <code class="docutils literal notranslate"><span class="pre">+0x04</span></code>. As with previous steps, the file offset
+storing the entry point address is also encoded using:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">u32</span><span class="p">(</span><span class="n">addr</span><span class="o">=</span><span class="mh">0x04</span><span class="p">)</span>
+<span class="n">b01</span> <span class="o">=</span> <span class="p">(</span><span class="o">~</span><span class="n">a</span> <span class="o">&amp;</span> <span class="mh">0xFFFFFF8E</span><span class="p">)</span> <span class="o">*</span> <span class="o">-</span><span class="mi">3</span> <span class="o">+</span> <span class="p">(</span><span class="o">~</span><span class="n">a</span> <span class="o">|</span> <span class="mh">0xFFFFFF8E</span><span class="p">)</span>
+<span class="n">b02</span> <span class="o">=</span> <span class="p">(</span><span class="n">a</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span> <span class="o">^</span> <span class="mh">0xFFFFFF1C</span>
+<span class="n">entry_point</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">addr</span><span class="p">((</span><span class="n">b01</span> <span class="o">+</span> <span class="n">b02</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0xFFFFFFFF</span><span class="p">,</span> <span class="n">rel</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="instruction-format">
+<h2>Instruction Format<a class="headerlink" href="#instruction-format" title="Link to this heading">#</a></h2>
+<p>To reverse engineer the instruction formats used in the custom VM, we need to
+decode both the opcodes and the memory addresses. Google’s bytecode design
+complicates this process by embedding hardcoded addresses for the next
+instructions. Specifically, the bytecode includes two potential next instruction
+addresses, and the actual address to use is determined through a hash check. The
+hash function employed to decide between the <code class="docutils literal notranslate"><span class="pre">next_instruction_addr</span></code> and the
+<code class="docutils literal notranslate"><span class="pre">fallback_addr</span></code> is the <a class="reference external" href="https://en.wikipedia.org/wiki/Fowler-Noll-Vo_hash_function">FNV-1</a>
+hash function.</p>
+<p>Each instruction in the bytecode follows to a stack-based paradigm. Initially, all
+variables are loaded from the stack as needed<label for='marginnote-role-1' class='margin-toggle marginnote-label'></label><input type='checkbox' id='marginnote-role-1' name='marginnote-role-1' class='margin-toggle'><span class="marginnote"> <em>“stack-based”</em> is confusing here, because there is no “real” stack</span>. For example, opcodes <code class="docutils literal notranslate"><span class="pre">0x41</span></code> and
+<code class="docutils literal notranslate"><span class="pre">0x58</span></code> allocate <code class="docutils literal notranslate"><span class="pre">0x18</span></code> bytes on the heap using <code class="docutils literal notranslate"><span class="pre">malloc</span></code> and push the result onto the
+stack without requiring any additional input. This means that there isn’t a single,
+universal instruction structure for this VM.</p>
+<p>However, we can identify common elements to determine how many items
+are taken from the stack and how many are pushed onto it.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">addr_t</span><span class="w"> </span><span class="n">aXorValue</span><span class="p">;</span><span class="w">         </span><span class="c1">// +0x0</span>
+<span class="w">    </span><span class="n">ulong</span><span class="w">  </span><span class="n">ulHash</span><span class="p">;</span><span class="w">            </span><span class="c1">// +0x4</span>
+<span class="w">    </span><span class="n">addr_t</span><span class="w"> </span><span class="n">aHashDataAddr</span><span class="p">;</span><span class="w">     </span><span class="c1">// +0xc</span>
+<span class="w">    </span><span class="kt">short</span><span class="w">  </span><span class="n">aHashDataLen</span><span class="p">;</span><span class="w">      </span><span class="c1">// +0x10</span>
+<span class="w">    </span><span class="n">addr_t</span><span class="w"> </span><span class="n">aNext</span><span class="p">;</span><span class="w">             </span><span class="c1">// +0x12</span>
+<span class="w">    </span><span class="n">addr_t</span><span class="w"> </span><span class="n">aFallback</span><span class="p">;</span><span class="w">         </span><span class="c1">// +0x16</span>
+<span class="p">}</span><span class="w"> </span><span class="n">insn_info_t</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>Once we identify the position of the parsed <code class="docutils literal notranslate"><span class="pre">short</span></code> or <code class="docutils literal notranslate"><span class="pre">long</span></code> in the bytecode stream,
+we can infer the names of all other fields. For example, opcode <code class="docutils literal notranslate"><span class="pre">0x05</span></code> reads the hash
+value at offset <code class="docutils literal notranslate"><span class="pre">+0x0c</span></code>, indicating that there are two variables taken from the stack:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">addr_t</span><span class="w"> </span><span class="n">a</span><span class="p">;</span><span class="w">                 </span><span class="c1">// +0x0</span>
+<span class="w">  </span><span class="n">addr_t</span><span class="w"> </span><span class="n">b</span><span class="p">;</span><span class="w">                 </span><span class="c1">// +0x4</span>
+<span class="w">  </span><span class="n">insn_info_t</span><span class="w"> </span><span class="n">info</span><span class="p">;</span><span class="w">         </span><span class="c1">// +0x8</span>
+<span class="w">  </span><span class="n">addr_t</span><span class="w"> </span><span class="n">c</span><span class="p">;</span><span class="w">                 </span><span class="c1">// +0x22</span>
+<span class="p">}</span><span class="w"> </span><span class="n">insn_0x05_t</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>Opcode <code class="docutils literal notranslate"><span class="pre">0x05</span></code>, referred to as <code class="docutils literal notranslate"><span class="pre">VMOp_Or_Byte</span></code> in the Python API, performs a bitwise OR
+operation on two bytes located at addresses A and B. The result is stored at
+address C.</p>
+<p>Since each opcode is compiled and static, we can decompile the code directly without
+needing to analyze low-level pcode instructions. The disassembled version of the first
+asset file is listed below:</p>
+<aside class="margin sidebar">
+<p class="sidebar-title"><strong>The same code can be expressed using C pseudocode:</strong></p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">v0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">malloc</span><span class="p">(</span><span class="mh">0x18</span><span class="p">);</span>
+<span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">v1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">malloc</span><span class="p">(</span><span class="mh">0x18</span><span class="p">);</span>
+</pre></div>
+</div>
+</aside>
+<div class="highlight-asm notranslate"><div class="highlight"><pre><span></span><span class="nl">.init:</span>
+<span class="w">    </span><span class="nf">BRANCH</span><span class="w">   </span><span class="no">lab_1d88a</span>
+
+<span class="nl">.lab_1d88a:</span><span class="w">                              </span><span class="c1">; opcode = 0x58</span>
+<span class="w">    </span><span class="nf">NEW</span><span class="w">      </span><span class="no">v0</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="mi">#0</span><span class="no">x38</span><span class="p">]</span><span class="w">                 </span><span class="c1">; =&gt; #0xdead000000000</span>
+<span class="w">    </span><span class="nf">STORE</span><span class="w">    </span><span class="mi">#0</span><span class="no">x16f8a</span><span class="p">,</span><span class="w"> </span><span class="no">v0</span>
+<span class="w">                                         </span><span class="c1">; fallback to #0x4877 - original: #0x2b4a</span>
+<span class="w">    </span><span class="nf">BRANCH</span><span class="w">   </span><span class="no">lab_4877</span>
+
+<span class="nl">.lab_4877:</span><span class="w">                               </span><span class="c1">; opcode = 0x41</span>
+<span class="w">    </span><span class="nf">NEW</span><span class="w">      </span><span class="no">v0</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="mi">#0</span><span class="no">x38</span><span class="p">]</span><span class="w">                 </span><span class="c1">; =&gt; #0xdead000000018</span>
+<span class="w">    </span><span class="nf">STORE</span><span class="w">    </span><span class="mi">#0</span><span class="no">xaf3a</span><span class="p">,</span><span class="w"> </span><span class="no">v0</span>
+<span class="w">    </span><span class="nf">BRANCH</span><span class="w">   </span><span class="no">lab_2ee8d</span>
+<span class="c1">; ...</span>
+</pre></div>
+</div>
+<p>When visualizing the execution of the initial opcodes, we look at their memory access and
+decision paths. Each opcode’s behavior can be mapped out to show how it influences the flow
+of execution:</p>
+<figure class="align-default" id="id3">
+<img alt="_images/depth_5.svg" src="_images/depth_5.svg" />
+<figcaption>
+<p><span class="caption-text">Example visualization of a decision tree based on the first five instructions executed
+upon loading the first bytecode file. <span class="text-danger">Red</span> lines point to fallback addresses
+and <span class="text-success">Green</span> lines to the next instruction address upon successful hash
+verification. <span class="text-secondary">Gray</span> points to the memory locations accessed within the
+instruction.</span><a class="headerlink" href="#id3" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+<section id="opcode-table">
+<h3>Opcode Table<a class="headerlink" href="#opcode-table" title="Link to this heading">#</a></h3>
+<p>With the structure of the instruction format identified, we can construct an opcode table
+that maps each opcode value to its corresponding handler function. However, before investing
+time into analyzing each handler, it’s important to verify the identified opcode handler for
+a newer version of the library to be the same.</p>
+<p>Upon repeating the analysis steps described earlier, we discovered that the opcode handler for
+<code class="docutils literal notranslate"><span class="pre">0x05</span></code> implements behavior different from the expected bitwise OR operation. Unfortunately,
+Google has introduced a feature that randomizes the opcode handler mapping each time the
+library is compiled, making analysis significantly more challenging.</p>
+<p>To counter this measure, we can implement handlers based on so-called format IDs, which allow
+us to abstract away the specific opcode values and focus on the underlying instruction formats
+instead.</p>
+<section id="format-ids">
+<h4>Format IDs<a class="headerlink" href="#format-ids" title="Link to this heading">#</a></h4>
+<p>Format IDs are used to describe the structure of each instruction. They generally consist
+of three characters: two digits followed by a letter.</p>
+<ul class="simple">
+<li><p>The first digit specifies the number of variables taken from the compiled stack.</p></li>
+<li><p>The second digit indicates the number of additional variables that need to be loaded.</p></li>
+<li><p>The final letter denotes which variable is used to store the result of the operation, if applicable.</p></li>
+</ul>
+<p>For example, the format :code:<code class="docutils literal notranslate"><span class="pre">&quot;20a&quot;</span></code> means the instruction reads two variables from the
+stack, does not load any additional variables, and stores the result in variable :code:<code class="docutils literal notranslate"><span class="pre">'a'</span></code>.
+If the letter is :code:<code class="docutils literal notranslate"><span class="pre">&quot;z&quot;</span></code>, it indicates that no data is being stored.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Note there is one additional special letter :code:<code class="docutils literal notranslate"><span class="pre">'x'</span></code> which indicates that the
+storage variable has not yet been identified.</p>
+</div>
+<p>We can leverage format IDs to implement a disassembler that is based on these identifiers. In
+the following sections, we will explore the possibility of automating the analysis process and
+demonstrate how to implement a decompiler/disassembler effectively. This approach allows us to
+systematically handle the opcode randomization challenge by focusing on the consistent patterns
+found in the instruction formats, rather than the opcodes themselves.</p>
+</section>
+</section>
+</section>
+</section>
+<hr class="footnotes docutils" />
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="cfg.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Identifying the VM</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="strings.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Strings</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#opcode-obfuscation">Opcode Obfuscation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#virtual-memory">Virtual Memory</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#entry-point">Entry Point</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#instruction-format">Instruction Format</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#opcode-table">Opcode Table</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#format-ids">Format IDs</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By MatrixEditor
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024, MatrixEditor.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
