@@ -1,0 +1,20 @@
+name: Rust Build
+on: [push]  # 触发工作流的 GitHub 事件，这里设置为在 push 事件时触发
+jobs:
+     build:
+       runs-on: ubuntu-latest  # 使用最新版本的 Ubuntu 作为运行环境
+
+       steps:
+       - uses: actions/checkout@v2  # 检出仓库
+
+       - name: Install Rust
+         uses: actions-rs/toolchain@v1
+         with:
+           toolchain: stable  # 指定 Rust 工具链版本
+           override: true
+
+       - name: Build
+         run: cargo build --verbose  # 运行 cargo build 命令
+
+       - name: Run tests
+         run: cargo test --verbose  # 运行 cargo test 命令（如果项目包含测试）
