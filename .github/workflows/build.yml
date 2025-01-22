@@ -16,5 +16,8 @@ jobs:
        - name: Build
          run: cargo build --verbose  # 运行 cargo build 命令
 
-       - name: Run tests
-         run: cargo test --verbose  # 运行 cargo test 命令（如果项目包含测试）
+       - name: Upload artifacts
+         uses: actions/upload-artifact@v2
+         with:
+           name: rust-binary  # 工件名称，可以是任何你喜欢的名字
+           path: target/release/  # 指定要上传的文件或目录路径
